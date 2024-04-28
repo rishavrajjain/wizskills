@@ -42,16 +42,93 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  late String animationURL;
+  Artboard? _teddyArtboard;
+  SMITrigger? successTrigger, failTrigger;
+  SMIBool? isHandsUp, isChecking, isTalking, isHearing;
+  SMINumber? numLook;
+
+  StateMachineController? stateMachineController;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<SpeakProvider>(context, listen: false).loadAnimation();
+    animationURL = defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS
+        ? 'assets/bear_1.riv'
+        : 'assets/bear_1.riv';
+    print('hahahha');
+    rootBundle.load(animationURL).then(
+      (data) {
+        final file = RiveFile.import(data);
+        final artboard = file.mainArtboard;
+        stateMachineController =
+            StateMachineController.fromArtboard(artboard, "State Machine 1");
+        print('ok $stateMachineController');
+        if (stateMachineController != null) {
+          print('ok');
+          artboard.addController(stateMachineController!);
+
+          for (var e in stateMachineController!.inputs) {
+            debugPrint(e.runtimeType.toString());
+            debugPrint("name${e.name}End");
+          }
+
+          for (var element in stateMachineController!.inputs) {
+            if (element.name == "success") {
+              successTrigger = element as SMITrigger;
+            } else if (element.name == "fail") {
+              failTrigger = element as SMITrigger;
+            } else if (element.name == "isHandsUp") {
+              isHandsUp = element as SMIBool;
+            } else if (element.name == "Check") {
+              isChecking = element as SMIBool;
+            } else if (element.name == "Talk") {
+              isTalking = element as SMIBool;
+            } else if (element.name == "Hear") {
+              isHearing = element as SMIBool;
+            } else if (element.name == "Look") {
+              numLook = element as SMINumber;
+            }
+          }
+        }
+
+        setState(() => _teddyArtboard = artboard);
+      },
+    );
+  }
+
+  void handsOnTheEyes() {
+    isHandsUp?.change(true);
+  }
+
+  void lookOnTheTextField() {
+    isHandsUp?.change(false);
+    isChecking?.change(true);
+    numLook?.change(0);
+  }
+
+  void moveEyeBalls(val) {
+    numLook?.change(val.length.toDouble());
+  }
+
+  void login() {
+    print('object');
+    isChecking?.change(false);
+    isHandsUp?.change(false);
+    if (_emailController.text == "admin" &&
+        _passwordController.text == "admin") {
+      successTrigger?.fire();
+    } else {
+      failTrigger?.fire();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final speak = Provider.of<SpeakProvider>(context);
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -111,12 +188,12 @@ class _LoginFormState extends State<LoginForm> {
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (speak.teddyArtboard != null)
+          if (_teddyArtboard != null)
             SizedBox(
               width: 400,
               height: 300,
               child: Rive(
-                artboard: speak.teddyArtboard!,
+                artboard: _teddyArtboard!,
                 fit: BoxFit.fitWidth,
               ),
             ),
