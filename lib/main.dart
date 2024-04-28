@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' as RiveLib;
 import 'package:wizskills/recorder/simple_recorder.dart';
 import 'package:provider/provider.dart'; // Import Provider package
 import 'package:wizskills/classes/speak_provider.dart';
@@ -60,27 +58,51 @@ class _LoginFormState extends State<LoginForm> {
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xff5F9EA0),
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFB0E0E6),
+                    Color(0xFF5F9EA0),
+                  ], // Replace with your desired gradient colors
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'Streak',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
                   SizedBox(
-                    height: 80,
-                    width: 80,
+                    height: 100,
+                    width: 100,
                     child: Center(
-                      child: RiveAnimation.asset(
+                      child: RiveLib.RiveAnimation.asset(
                         'assets/sparky.riv',
                         fit: BoxFit.cover,
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    width: 40,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '1',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 42,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        'Daily practice\nboosts streak!',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -115,7 +137,7 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               width: 400,
               height: 300,
-              child: Rive(
+              child: RiveLib.Rive(
                 artboard: speak.teddyArtboard!,
                 fit: BoxFit.fitWidth,
               ),
