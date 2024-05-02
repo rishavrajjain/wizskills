@@ -1,46 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:rive/rive.dart' as RiveLib;
-import 'package:wizskills/classes/practise.dart';
-import 'package:wizskills/recorder/simple_recorder.dart';
-import 'package:provider/provider.dart'; // Import Provider package
 import 'package:wizskills/classes/speak_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:rive/rive.dart' as RiveLib;
+import 'package:wizskills/main.dart';
 
-void main() {
-  runApp(
-    // Wrap your MaterialApp with Provider
-    ChangeNotifierProvider(
-      create: (context) => SpeakProvider(), // Initialize SpaekProvider
-      child: const MyApp(),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PractiseScreen extends StatefulWidget {
+  const PractiseScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: "Poppins",
-        primarySwatch: Colors.blue,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: const LoginForm(),
-    );
-  }
+  State<PractiseScreen> createState() => _PractiseScreenState();
 }
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
-
-  @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
+class _PractiseScreenState extends State<PractiseScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -50,7 +21,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final speak = Provider.of<SpeakProvider>(context);
+    final speakProvider = Provider.of<SpeakProvider>(context);
+    print('${speakProvider.selectedText.length}');
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -109,13 +81,9 @@ class _LoginFormState extends State<LoginForm> {
             ),
             ListTile(
               leading: const Icon(
-                Icons.home_rounded,
-                color: Color(0xFF5F9EA0),
+                Icons.home_outlined,
               ),
-              title: const Text(
-                'Home',
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
+              title: const Text('Home'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -125,8 +93,14 @@ class _LoginFormState extends State<LoginForm> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.spatial_audio_off_outlined),
-              title: const Text('Practise'),
+              leading: const Icon(
+                Icons.spatial_audio_off_rounded,
+                color: Color(0xFF5F9EA0),
+              ),
+              title: const Text(
+                'Practise',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
@@ -136,7 +110,6 @@ class _LoginFormState extends State<LoginForm> {
                 // Add functionality for Item 1 here
               },
             ),
-
             // Add more ListTiles for additional items
           ],
         ),
@@ -148,20 +121,14 @@ class _LoginFormState extends State<LoginForm> {
       ),
       backgroundColor: const Color(0xffd6e2ea),
       body: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (speak.teddyArtboard != null)
-            SizedBox(
-              width: 400,
-              height: 300,
-              child: RiveLib.Rive(
-                artboard: speak.teddyArtboard!,
-                fit: BoxFit.fitWidth,
+        children: speakProvider.selectedText
+            .map(
+              (str) => Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(str),
               ),
-            ),
-          const SimpleRecorder(),
-          // const SimpleRecorder()
-        ],
+            )
+            .toList(),
       ),
     );
   }

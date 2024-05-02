@@ -13,9 +13,10 @@ class SpeakProvider extends ChangeNotifier {
   SMINumber? numLook;
   StateMachineController? stateMachineController;
   Artboard? _teddyArtboard;
-  String whatYouSaid = 'Select a topic';
+  String whatYouSaid = 'Select any topic';
   String youCouldHavesaid =
-      'Share about a movie or TV show you enjoy watching.';
+      'Eg: Share about a movie or TV show you enjoy watching.';
+  List<String> selectedText = [];
 
   // Constructor to initialize the triggers and booleans
   SpeakProvider({
@@ -29,6 +30,13 @@ class SpeakProvider extends ChangeNotifier {
 
   void handsOnTheEyes() {
     isHandsUp?.change(true);
+  }
+
+  void addToSelectedText(String text) {
+   selectedText.add(text);
+   print('Lengthhhh');
+   print(selectedText.length);
+   notifyListeners();
   }
 
   void lookOnTheTextField() {

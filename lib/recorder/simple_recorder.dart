@@ -30,7 +30,6 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
   bool _mRecorderIsInited = false;
   bool _mplaybackReady = false;
   String recordedUrl = 'tau_file.mp4';
-  final selectedText = [];
   String tempSelectedText = '';
 
   String checkWordOrPhrase(String text) {
@@ -218,8 +217,10 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
                       style: const TextStyle(fontSize: 14),
                       onSelectionChanged: (selection, cause) async {
                         // Store the selected text when selection changes
+                        if (kIsWeb) {
+                          await BrowserContextMenu.disableContextMenu();
+                        }
 
-                        await BrowserContextMenu.disableContextMenu();
                         setState(() {
                           tempSelectedText =
                               speakProvider.youCouldHavesaid.substring(
@@ -239,7 +240,8 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
                                 if (tempSelectedText.isNotEmpty) {
                                   // Print the selected word
                                   print('Selected word: $tempSelectedText');
-                                  selectedText.add(tempSelectedText);
+                                  speakProvider
+                                      .addToSelectedText(tempSelectedText);
                                 }
                                 editableTextState.hideToolbar();
                               },
@@ -306,7 +308,7 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
             ),
           ),
           Row(
-            children: selectedText
+            children: speakProvider.selectedText
                 .map(
                   (str) => Padding(
                     padding: const EdgeInsets.all(8.0),
