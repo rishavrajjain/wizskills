@@ -237,7 +237,6 @@ class _SimpleRecorderState extends State<SimpleRecorder> {
 // ----------------------------- UI --------------------------------------------
 
   _Fn? getRecorderFn() {
-    print('objectt ${!_mRecorderIsInited} ${!_mPlayer!.isStopped}');
     // print(!_mRecorderIsInited || !_mPlayer!.isStopped);
     if (!_mRecorderIsInited || !_mPlayer!.isStopped) {
       return null;

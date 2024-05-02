@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
-import 'package:wizskills/classes/azure_api.dart';
+import 'package:wizskills/api/azure_api.dart';
 
 class SpeakProvider extends ChangeNotifier {
   // Define variables to hold the triggers and booleans
@@ -34,8 +34,6 @@ class SpeakProvider extends ChangeNotifier {
 
   void addToSelectedText(String text) {
    selectedText.add(text);
-   print('Lengthhhh');
-   print(selectedText.length);
    notifyListeners();
   }
 
@@ -58,7 +56,6 @@ class SpeakProvider extends ChangeNotifier {
   }
 
   void login() {
-    print('object');
     isChecking?.change(false);
     isHandsUp?.change(false);
     if (true) {
@@ -80,9 +77,7 @@ class SpeakProvider extends ChangeNotifier {
 
       stateMachineController =
           StateMachineController.fromArtboard(artboard, "State Machine 1");
-      print('ok $stateMachineController');
       if (stateMachineController != null) {
-        print('ok');
         artboard.addController(stateMachineController!);
 
         for (var e in stateMachineController!.inputs) {

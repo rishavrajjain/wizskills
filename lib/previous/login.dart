@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
-import 'package:wizskills/recorder/simple_recorder.dart';
+import 'package:wizskills/ui/home/recorded_text_container.dart';
 import 'package:provider/provider.dart'; // Import Provider package
-import 'package:wizskills/classes/speak_provider.dart';
+import 'package:wizskills/provider/speak_provider.dart';
 
 void main() {
    runApp(
@@ -59,16 +59,13 @@ class _LoginFormState extends State<LoginForm> {
             defaultTargetPlatform == TargetPlatform.iOS
         ? 'assets/bear_1.riv'
         : 'assets/bear_1.riv';
-    print('hahahha');
     rootBundle.load(animationURL).then(
       (data) {
         final file = RiveFile.import(data);
         final artboard = file.mainArtboard;
         stateMachineController =
             StateMachineController.fromArtboard(artboard, "State Machine 1");
-        print('ok $stateMachineController');
         if (stateMachineController != null) {
-          print('ok');
           artboard.addController(stateMachineController!);
 
           for (var e in stateMachineController!.inputs) {
@@ -115,7 +112,6 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void login() {
-    print('object');
     isChecking?.change(false);
     isHandsUp?.change(false);
     if (_emailController.text == "admin" &&
@@ -238,7 +234,7 @@ class _LoginFormState extends State<LoginForm> {
                 ],
               ),
             ),
-            const SimpleRecorder()
+            const RecordedTextContainer()
           ],
         ),
       ),

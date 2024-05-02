@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wizskills/classes/speak_provider.dart';
+import 'package:wizskills/ui/home/home_screen.dart';
+import 'package:wizskills/provider/speak_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:rive/rive.dart' as RiveLib;
-import 'package:wizskills/main.dart';
+import 'package:rive/rive.dart' as rive_lib;
 
 class PractiseScreen extends StatefulWidget {
   const PractiseScreen({super.key});
@@ -14,7 +14,6 @@ class PractiseScreen extends StatefulWidget {
 class _PractiseScreenState extends State<PractiseScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<SpeakProvider>(context, listen: false).loadAnimation();
   }
@@ -22,7 +21,6 @@ class _PractiseScreenState extends State<PractiseScreen> {
   @override
   Widget build(BuildContext context) {
     final speakProvider = Provider.of<SpeakProvider>(context);
-    print('${speakProvider.selectedText.length}');
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -47,7 +45,7 @@ class _PractiseScreenState extends State<PractiseScreen> {
                     height: 100,
                     width: 100,
                     child: Center(
-                      child: RiveLib.RiveAnimation.asset(
+                      child: rive_lib.RiveAnimation.asset(
                         'assets/sparky.riv',
                         fit: BoxFit.cover,
                       ),
@@ -87,7 +85,7 @@ class _PractiseScreenState extends State<PractiseScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginForm()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                 );
                 // Add functionality for Item 2 here
               },
@@ -99,7 +97,7 @@ class _PractiseScreenState extends State<PractiseScreen> {
               ),
               title: const Text(
                 'Practise',
-                style: TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(fontWeight: FontWeight.w500),
               ),
               onTap: () {
                 Navigator.push(
