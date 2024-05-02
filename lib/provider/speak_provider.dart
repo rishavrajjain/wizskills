@@ -17,6 +17,9 @@ class SpeakProvider extends ChangeNotifier {
   String youCouldHavesaid =
       'Eg: Share about a movie or TV show you enjoy watching.';
   List<String> selectedText = [];
+  String yourAnswer = 'Answer: Use the word';
+  String betterAnswer = '';
+  bool? usedWord;
 
   // Constructor to initialize the triggers and booleans
   SpeakProvider({
@@ -33,8 +36,8 @@ class SpeakProvider extends ChangeNotifier {
   }
 
   void addToSelectedText(String text) {
-   selectedText.add(text);
-   notifyListeners();
+    selectedText.add(text);
+    notifyListeners();
   }
 
   void lookOnTheTextField() {
@@ -133,10 +136,8 @@ class SpeakProvider extends ChangeNotifier {
   Future<String> makeGptApiCall(
       {required String userContent, required String prompt}) async {
     try {
-      final String response = await AzureApi().makeGptApiCall(
-          userContent: userContent,
-          prompt:
-              "You are an AI assistant that helps people speak things in a better more articulate way using simple plain words.");
+      final String response = await AzureApi()
+          .makeGptApiCall(userContent: userContent, prompt: prompt);
 
       return response;
     } catch (e) {
@@ -144,17 +145,38 @@ class SpeakProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> makeWhisperApiCall(
-      {required String recordedUrl}) async {
+  Future<String> makeWhisperApiCall({required String recordedUrl}) async {
     try {
-      final String response = await AzureApi()
-          .makeWhisperApiCall(recordedUrl: recordedUrl);
+      final String response =
+          await AzureApi().makeWhisperApiCall(recordedUrl: recordedUrl);
       whatYouSaid = response;
       notifyListeners();
-      String messageContent =
-          await makeGptApiCall(userContent: response, prompt: '');
+      String messageContent = await makeGptApiCall(
+          userContent: response,
+          prompt:
+              "You are an AI assistant that helps people speak things in a better more articulate way using simple plain words.");
       triggerSuccess();
       youCouldHavesaid = messageContent;
+      notifyListeners();
+      return messageContent;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> makePractiseWhisperApiCall(
+      {required String recordedUrl}) async {
+    try {
+      final String response =
+          await AzureApi().makeWhisperApiCall(recordedUrl: recordedUrl);
+      yourAnswer = response;
+      usedWord = yourAnswer.split(' ').contains('replicate');
+      notifyListeners();
+      String messageContent = await makeGptApiCall(
+          userContent: response,
+          prompt:
+              "You are an AI assistant that helps people speak things in a better more articulate way using simple plain words.");
+      betterAnswer = messageContent;
       notifyListeners();
       return messageContent;
     } catch (e) {

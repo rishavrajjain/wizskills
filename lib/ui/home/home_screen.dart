@@ -31,17 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String recordedUrl = 'tau_file.mp4';
   String tempSelectedText = '';
 
-  String checkWordOrPhrase(String text) {
-    // Split the text into words
-    List<String> words = text.split(' ');
-    // If there is only one word, it's a word; otherwise, it's a phrase
-    if (words.length == 1) {
-      return 'Add Word';
-    } else {
-      return 'Add Phrase';
-    }
-  }
-
   @override
   void initState() {
     Provider.of<SpeakProvider>(context, listen: false).loadAnimation();
