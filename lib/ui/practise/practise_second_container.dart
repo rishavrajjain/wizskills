@@ -1,18 +1,21 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:rive/rive.dart' as rive_lib;
 
 import 'package:wizskills/provider/speak_provider.dart';
 
-class PractiseTextContainer extends StatefulWidget {
-  const PractiseTextContainer({super.key});
+class PractiseSecondContainer extends StatefulWidget {
+  const PractiseSecondContainer({super.key});
 
   @override
-  State<PractiseTextContainer> createState() => _PractiseTextContainerState();
+  State<PractiseSecondContainer> createState() =>
+      _PractiseSecondContainerState();
 }
 
-class _PractiseTextContainerState extends State<PractiseTextContainer> {
+class _PractiseSecondContainerState extends State<PractiseSecondContainer> {
   String tempSelectedText = '';
 
   String checkWordOrPhrase(String text) {
@@ -36,43 +39,48 @@ class _PractiseTextContainerState extends State<PractiseTextContainer> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               Text(
-                  'Replicate',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24,
-                    color: speakProvider.usedWord != null
-                        ? (speakProvider.usedWord! ? Colors.green : Colors.red)
-                        : Colors.black,
-                  ),
-                ),
-                const Text(
-                  ' make an exact copy of; reproduce.',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                const Text(
-                  'Question',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Text(
-                  'Can you explain how you would replicate your favorite dish at home?',
-                  style: TextStyle(fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 24,
+              if (speakProvider.teddyArtboard != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: SizedBox(
+                          width: 150,
+                          height: 150,
+                          child: rive_lib.Rive(
+                            artboard: speakProvider.teddyArtboard!,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: SizedBox(
+                          width: 150,
+                          height: 150,
+                          child: rive_lib.Rive(
+                            artboard: speakProvider.secondTeddyArtboard!,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -105,7 +113,7 @@ class _PractiseTextContainerState extends State<PractiseTextContainer> {
                             if (kIsWeb) {
                               await BrowserContextMenu.disableContextMenu();
                             }
-          
+
                             setState(() {
                               tempSelectedText =
                                   speakProvider.youCouldHavesaid.substring(
@@ -134,7 +142,7 @@ class _PractiseTextContainerState extends State<PractiseTextContainer> {
                             );
                           },
                         )
-          
+
                         // Text(youCouldHavesaid),
                       ],
                     ),

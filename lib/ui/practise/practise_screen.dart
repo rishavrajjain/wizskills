@@ -9,6 +9,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+import 'package:wizskills/ui/practise/practise_second_container.dart';
 import 'package:wizskills/ui/practise/practise_text_container.dart';
 
 const theSource = AudioSource.microphone;
@@ -34,6 +35,7 @@ class _PractiseScreenState extends State<PractiseScreen> {
   @override
   void initState() {
     Provider.of<SpeakProvider>(context, listen: false).loadAnimation();
+    Provider.of<SpeakProvider>(context, listen: false).loadSecondAnimation();
     _mPlayer!.openPlayer().then((value) {
       setState(() {
         _mPlayerIsInited = true;
@@ -304,72 +306,14 @@ class _PractiseScreenState extends State<PractiseScreen> {
             const SizedBox(
               height: 36,
             ),
-            // Row(children: [
-            //   ElevatedButton(
-            //     onPressed: getPlaybackFn(),
-            //     //color: Colors.white,
-            //     //disabledColor: Colors.grey,
-            //     child: Icon(_mPlayer!.isPlaying
-            //         ? Icons.stop
-            //         : Icons.play_arrow_rounded),
-            //   ),
-            //   const SizedBox(
-            //     width: 20,
-            //   ),
-            //   Text(_mPlayer!.isPlaying
-            //       ? 'Playback in progress'
-            //       : 'Player is stopped'),
-            // ]),
           ],
         ),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Replicate',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: speak.usedWord != null
-                      ? (speak.usedWord! ? Colors.green : Colors.red)
-                      : Colors.black,
-                ),
-              ),
-              const Text(
-                ' make an exact copy of; reproduce.',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const Text(
-                'Question',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Text(
-                'Can you explain how you would replicate your favorite dish at home?',
-                style: TextStyle(fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const PractiseTextContainer()
-            ],
-          ),
-        ),
+      body: PageView(
+        children: const [
+          PractiseTextContainer(),
+          PractiseSecondContainer(),
+        ],
       ),
     );
   }

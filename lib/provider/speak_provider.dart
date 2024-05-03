@@ -13,6 +13,7 @@ class SpeakProvider extends ChangeNotifier {
   SMINumber? numLook;
   StateMachineController? stateMachineController;
   Artboard? _teddyArtboard;
+  Artboard? _secondTeddyArtboard;
   String whatYouSaid = 'Select any topic';
   String youCouldHavesaid =
       'Eg: Share about a movie or TV show you enjoy watching.';
@@ -30,6 +31,10 @@ class SpeakProvider extends ChangeNotifier {
   });
 
   Artboard? get teddyArtboard => _teddyArtboard;
+  Artboard? get secondTeddyArtboard => _secondTeddyArtboard;
+
+
+
 
   void handsOnTheEyes() {
     isHandsUp?.change(true);
@@ -108,6 +113,53 @@ class SpeakProvider extends ChangeNotifier {
       }
 
       _teddyArtboard = artboard;
+      notifyListeners();
+    } catch (error) {
+      print('Error loading animation: $error');
+    }
+  }
+
+
+    Future<void> loadSecondAnimation() async {
+    const animationURL = 'assets/bear_2.riv';
+
+    try {
+      final data = await rootBundle.load(animationURL);
+      final file = RiveFile.import(data);
+      final artboard = file.mainArtboard;
+
+      // ... (remaining parsing logic from initState can go here)
+
+      stateMachineController =
+          StateMachineController.fromArtboard(artboard, "State Machine 1");
+      if (stateMachineController != null) {
+        artboard.addController(stateMachineController!);
+
+        for (var e in stateMachineController!.inputs) {
+          debugPrint(e.runtimeType.toString());
+          debugPrint("name${e.name}End");
+        }
+
+        for (var element in stateMachineController!.inputs) {
+          if (element.name == "success") {
+            successTrigger = element as SMITrigger;
+          } else if (element.name == "fail") {
+            failTrigger = element as SMITrigger;
+          } else if (element.name == "isHandsUp") {
+            isHandsUp = element as SMIBool;
+          } else if (element.name == "Check") {
+            isChecking = element as SMIBool;
+          } else if (element.name == "Talk") {
+            isTalking = element as SMIBool;
+          } else if (element.name == "Hear") {
+            isHearing = element as SMIBool;
+          } else if (element.name == "Look") {
+            numLook = element as SMINumber;
+          }
+        }
+      }
+
+      _secondTeddyArtboard = artboard;
       notifyListeners();
     } catch (error) {
       print('Error loading animation: $error');
