@@ -313,6 +313,7 @@ class _PractiseScreenState extends State<PractiseScreen> {
         children: const [
           PractiseTextContainer(),
           PractiseSecondContainer(),
+         // PractiseThirdContainer(),
         ],
       ),
     );

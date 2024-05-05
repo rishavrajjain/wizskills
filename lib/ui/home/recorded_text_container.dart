@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:wizskills/provider/speak_provider.dart';
 
-
-
 class RecordedTextContainer extends StatefulWidget {
   const RecordedTextContainer({super.key});
 
@@ -40,7 +38,7 @@ class _RecordedTextContainerState extends State<RecordedTextContainer> {
             child: Container(
               alignment: Alignment.center,
               width: kIsWeb ? 600 : null,
-              margin: const EdgeInsets.only(bottom: 15 * 4),
+              // margin: const EdgeInsets.only(bottom: 15 * 4),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -94,8 +92,17 @@ class _RecordedTextContainerState extends State<RecordedTextContainer> {
                           ],
                         );
                       },
-                    )
-
+                    ),
+                    Visibility(
+                      visible: speakProvider.showConcepts,
+                      child: const Align(
+                        alignment: Alignment.bottomRight,
+                        child: Icon(
+                          Icons.volume_up,
+                          size: 18,
+                        ),
+                      ),
+                    ),
                     // Text(youCouldHavesaid),
                   ],
                 ),

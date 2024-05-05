@@ -14,13 +14,14 @@ class SpeakProvider extends ChangeNotifier {
   StateMachineController? stateMachineController;
   Artboard? _teddyArtboard;
   Artboard? _secondTeddyArtboard;
-  String whatYouSaid = 'Select any topic';
+  String whatYouSaid = 'Speak on any topic of your choice';
   String youCouldHavesaid =
       'Eg: Share about a movie or TV show you enjoy watching.';
   List<String> selectedText = [];
   String yourAnswer = 'Answer: Use the word';
   String betterAnswer = '';
   bool? usedWord;
+  bool showConcepts = false;
 
   // Constructor to initialize the triggers and booleans
   SpeakProvider({
@@ -32,9 +33,6 @@ class SpeakProvider extends ChangeNotifier {
 
   Artboard? get teddyArtboard => _teddyArtboard;
   Artboard? get secondTeddyArtboard => _secondTeddyArtboard;
-
-
-
 
   void handsOnTheEyes() {
     isHandsUp?.change(true);
@@ -61,6 +59,10 @@ class SpeakProvider extends ChangeNotifier {
 
   void moveEyeBalls(val) {
     numLook?.change(val.length.toDouble());
+  }
+
+  void startTalking() {
+    isTalking?.change(true);
   }
 
   void login() {
@@ -108,7 +110,7 @@ class SpeakProvider extends ChangeNotifier {
             isHearing = element as SMIBool;
           } else if (element.name == "Look") {
             numLook = element as SMINumber;
-          }
+          } 
         }
       }
 
@@ -119,8 +121,7 @@ class SpeakProvider extends ChangeNotifier {
     }
   }
 
-
-    Future<void> loadSecondAnimation() async {
+  Future<void> loadSecondAnimation() async {
     const animationURL = 'assets/bear_2.riv';
 
     try {
@@ -190,7 +191,6 @@ class SpeakProvider extends ChangeNotifier {
     try {
       final String response = await AzureApi()
           .makeGptApiCall(userContent: userContent, prompt: prompt);
-
       return response;
     } catch (e) {
       rethrow;
@@ -208,6 +208,7 @@ class SpeakProvider extends ChangeNotifier {
           prompt:
               "You are an AI assistant that helps people speak things in a better more articulate way using simple plain words.");
       triggerSuccess();
+      showConcepts = true;
       youCouldHavesaid = messageContent;
       notifyListeners();
       return messageContent;
@@ -222,7 +223,7 @@ class SpeakProvider extends ChangeNotifier {
       final String response =
           await AzureApi().makeWhisperApiCall(recordedUrl: recordedUrl);
       yourAnswer = response;
-      usedWord = yourAnswer.split(' ').contains('replicate');
+      usedWord = yourAnswer.split(' ').contains('admire');
       notifyListeners();
       String messageContent = await makeGptApiCall(
           userContent: response,

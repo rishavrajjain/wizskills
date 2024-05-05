@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:wizskills/api/api_end_points.dart';
 
 class AzureApi {
   Future<String> makeGptApiCall(
       {required String userContent, required String prompt}) async {
     try {
-      const String url =
-          'https://wizskillsai.openai.azure.com/openai/deployments/deplymentgpt/chat/completions?api-version=2024-02-15-preview';
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'api-key': 'c6ec9e339bc94ce382c0163f476c7412',
+        'api-key': ApiEndpoints.gptApiKey,
       };
       final Map<String, dynamic> data = {
         "messages": [
@@ -26,22 +25,20 @@ class AzureApi {
       };
 
       final http.Response response = await http.post(
-        Uri.parse(url),
+        Uri.parse(ApiEndpoints.gptApiUrl),
         headers: headers,
         body: jsonEncode(data),
       );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
-        // Extracting the content from the response
-
         String content = jsonResponse['choices'][0]['message']['content'];
         return content;
       } else {
         throw Exception('Failed to load data');
       }
     } catch (e) {
-      print("ERROR getting GPT : ${e.toString()}");
+      print("ERROR getting GPT Text : ${e.toString()}");
       rethrow;
     }
   }
@@ -49,20 +46,12 @@ class AzureApi {
   Future<String> makeWhisperApiCall(
       {required String recordedUrl}) async {
     try {
-      // Check if the file exists at the specified path
-
-      // Rest of your code remains unchanged
-      // Construct the API URL
-      const String endpoint = 'https://wizskillsai.openai.azure.com';
-      const String apiKey = 'c6ec9e339bc94ce382c0163f476c7412';
-      const String deploymentName = 'deployment-01';
-      const String apiUrl =
-          '$endpoint/openai/deployments/$deploymentName/audio/transcriptions?api-version=2024-02-01';
-      final Uri url = Uri.parse(apiUrl);
-
-      final http.MultipartRequest request = http.MultipartRequest('POST', url);
-      request.files.add(await http.MultipartFile.fromPath('file', recordedUrl));
-      request.headers['api-key'] = apiKey;
+      final Uri url = Uri.parse(ApiEndpoints.whisperApiUrl);
+      final http.MultipartRequest request =
+          http.MultipartRequest('POST', url);
+      request.files.add(await http.MultipartFile.fromPath(
+          'file', recordedUrl));
+      request.headers['api-key'] = ApiEndpoints.whisperApiKey;
 
       final http.StreamedResponse response = await request.send();
 
@@ -74,9 +63,7 @@ class AzureApi {
       }
     } catch (e) {
       print('Error making whisper API call: $e');
-      // You may want to throw the error here to propagate it
       rethrow;
     }
-    // Add a default return statement
   }
 }

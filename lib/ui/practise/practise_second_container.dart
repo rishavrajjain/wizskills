@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart' as rive_lib;
 
 import 'package:wizskills/provider/speak_provider.dart';
+import 'package:wizskills/ui/practise/components/chat_bubble.dart';
 
 class PractiseSecondContainer extends StatefulWidget {
   const PractiseSecondContainer({super.key});
@@ -42,13 +41,56 @@ class _PractiseSecondContainerState extends State<PractiseSecondContainer> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Verb conjugation in the',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: speakProvider.usedWord != null
+                          ? (speakProvider.usedWord!
+                              ? Colors.green
+                              : Colors.red)
+                          : Colors.black,
+                    ),
+                  ),
+                  Text(
+                    'past tense',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: speakProvider.usedWord != null
+                          ? (speakProvider.usedWord!
+                              ? Colors.green
+                              : Colors.red)
+                          : Colors.black,
+                    ),
+                  ),
+                  // const Text(
+                  //   'to feel respect and approval for (someone/something)',
+                  //   style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+                  // ),
+                  InkWell(
+                    onTap: () {
+                      speakProvider.startTalking();
+                    },
+                    child: const SizedBox(
+                      height: 24,
+                      width: 150,
+                    ),
+                  ),
+                ],
+              ),
               if (speakProvider.teddyArtboard != null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: Colors.transparent,
+                        color: Colors.green,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Padding(
@@ -63,20 +105,14 @@ class _PractiseSecondContainerState extends State<PractiseSecondContainer> {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: rive_lib.Rive(
-                            artboard: speakProvider.secondTeddyArtboard!,
-                            fit: BoxFit.fitWidth,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: rive_lib.Rive(
+                          artboard: speakProvider.secondTeddyArtboard!,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                     ),
@@ -92,55 +128,26 @@ class _PractiseSecondContainerState extends State<PractiseSecondContainer> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Column(
                       children: [
                         Text(
-                          speakProvider.yourAnswer,
-                          style: const TextStyle(
+                          'Use the verb "to see"',
+                          style: TextStyle(
                             fontSize: 12,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const Divider(),
-                        SelectableText(
-                          textAlign: TextAlign.center,
-                          speakProvider.betterAnswer,
-                          style: const TextStyle(fontSize: 14),
-                          onSelectionChanged: (selection, cause) async {
-                            // Store the selected text when selection changes
-                            if (kIsWeb) {
-                              await BrowserContextMenu.disableContextMenu();
-                            }
-
-                            setState(() {
-                              tempSelectedText =
-                                  speakProvider.youCouldHavesaid.substring(
-                                selection.base.offset,
-                                selection.extent.offset,
-                              );
-                            });
-                          },
-                          contextMenuBuilder: (context, editableTextState) {
-                            return AdaptiveTextSelectionToolbar.buttonItems(
-                              anchors: editableTextState.contextMenuAnchors,
-                              buttonItems: [
-                                ContextMenuButtonItem(
-                                  onPressed: () {
-                                    // Check if text is selected
-                                    if (tempSelectedText.isNotEmpty) {
-                                      // Print the selected word
-                                      speakProvider
-                                          .addToSelectedText(tempSelectedText);
-                                    }
-                                    editableTextState.hideToolbar();
-                                  },
-                                  label: checkWordOrPhrase(tempSelectedText),
-                                )
-                              ],
-                            );
-                          },
+                        Divider(),
+                        ChatBubble(
+                          message: 'Hey, did you watch the game last night?',
+                          isMe: false,
+                        ),
+                        ChatBubble(
+                          message:
+                              'Yeah, I watched it. The team played really well.',
+                          isMe: true,
                         )
 
                         // Text(youCouldHavesaid),

@@ -36,44 +36,44 @@ class _PractiseTextContainerState extends State<PractiseTextContainer> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               Text(
-                  'Replicate',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24,
-                    color: speakProvider.usedWord != null
-                        ? (speakProvider.usedWord! ? Colors.green : Colors.red)
-                        : Colors.black,
-                  ),
+              Text(
+                'Admire',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24,
+                  color: speakProvider.usedWord != null
+                      ? (speakProvider.usedWord! ? Colors.green : Colors.red)
+                      : Colors.black,
                 ),
-                const Text(
-                  ' make an exact copy of; reproduce.',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+              ),
+              const Text(
+                'to feel respect and approval for (someone/something)',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              const Text(
+                'Question',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                const Text(
-                  'Question',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Text(
-                  'Can you explain how you would replicate your favorite dish at home?',
-                  style: TextStyle(fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const Text(
+                'Who is someone you admire and why?',
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
@@ -105,7 +105,7 @@ class _PractiseTextContainerState extends State<PractiseTextContainer> {
                             if (kIsWeb) {
                               await BrowserContextMenu.disableContextMenu();
                             }
-          
+
                             setState(() {
                               tempSelectedText =
                                   speakProvider.youCouldHavesaid.substring(
@@ -134,7 +134,7 @@ class _PractiseTextContainerState extends State<PractiseTextContainer> {
                             );
                           },
                         )
-          
+
                         // Text(youCouldHavesaid),
                       ],
                     ),

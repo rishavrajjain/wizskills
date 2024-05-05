@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart' as rive_lib;
+import 'package:wizskills/ui/home/concept_card.dart';
+import 'package:wizskills/ui/home/pronunciation_card.dart';
 import 'package:wizskills/ui/practise/practise_screen.dart';
 import 'package:wizskills/ui/home/recorded_text_container.dart';
 import 'package:provider/provider.dart'; // Import Provider package
@@ -106,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
       audioSource: theSource,
     )
         .then((value) {
-      setState(() {});
+      setState(() {
+
+      });
     });
   }
 
@@ -323,8 +327,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
+        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (speak.teddyArtboard != null)
             Row(
@@ -343,6 +347,30 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           const RecordedTextContainer(),
+          Visibility(
+            visible: speak.showConcepts,
+            child: const Column(
+              children: [
+                SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: PronunciationCard(),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ConceptsCard(),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
